@@ -1,0 +1,1 @@
+export const imageUrl = <string> "https://png.pngtree.com/thumb_back/fh260/background/20240522/pngtree-ai-generated-abstract-dark-red-background-dramatic-red-sky-red-sunset-image_15691828.jpg";

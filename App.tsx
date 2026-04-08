@@ -1,11 +1,20 @@
 import { TextInput, View, Text, StyleSheet, Button, Image } from "react-native";
 import PromptScreen from "./components/PromptScreen/PromptScreen";
+import { useAutoGradientColor } from "./components/GetGradientColor/useAutoGradientColor";
+import { imageUrl } from "./utils/imageURL";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function App() {
+  const { gradientColors } = useAutoGradientColor(imageUrl);
+
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      style={styles.gradient}
+      colors={gradientColors}
+    >
       <PromptScreen />
-    </View>
+    </LinearGradient>
+
   );
 }
 
@@ -13,7 +22,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: "center",
   },
   input: {
     height: 40,
@@ -22,4 +30,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 10,
   },
+  gradient: {
+    flex: 1,
+  }
 });

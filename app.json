@@ -1,4 +1,17 @@
 {
   "name": "my-app",
-  "slug": "my-app"
+  "slug": "my-app",
+  "android": {
+    "package": "com.jester_ronin.myapp"
+  },
+  "extra": {
+    "eas": {
+      "projectId": "5261a2ef-5631-438e-bd0a-8c1daed881c0"
+    },
+    "expo": {
+      "name": "My LMM App",
+      "slug": "my-app",
+      "icon": "./utils/red-sky.jpg"
+    }
+  }
 }

@@ -24,7 +24,7 @@ export const useChatApi = () => {
 
             const data = await response.json();
             const content = data.choices[0].message.content;
-            setApiResponse(JSON.stringify(extractAnswer(content)));
+            setApiResponse(extractAnswer(content));
 
         } catch (error) {
             console.error(error);
