@@ -96,7 +96,7 @@ const PromptScreen: React.FC = () => {
                         </View>
                     )}
                 </View>
-                <View style={styles.responseView}>
+                <View style={apiResponse ? styles.responseView : styles.responseViewEmpty}>
                     {apiResponse && <Text style={styles.responseText}>Ответ сервера: {apiResponse}
                     </Text>}
                 </View>
@@ -155,6 +155,9 @@ const styles = StyleSheet.create({
         borderWidth: 4,
         borderStyle: 'dashed',
         backgroundColor: "#EDE8D0",
+    },
+    responseViewEmpty: {
+        marginTop: 20,
     },
     button: {
         backgroundColor: '#72b6ff',
