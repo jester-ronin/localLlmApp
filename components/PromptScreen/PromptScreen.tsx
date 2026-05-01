@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { TextInput, View, Text, StyleSheet, ActivityIndicator, Button, Image, TouchableOpacity } from "react-native";
+import { TextInput, View, Text, StyleSheet, ActivityIndicator, Image, TouchableOpacity, ScrollView } from "react-native";
 import { useChatApi } from "../api/useChatApi";
 import { imageUrl } from "../../utils/imageURL";
-import { ScrollView } from "react-native";
 
 
 const PromptScreen: React.FC = () => {
@@ -15,55 +14,63 @@ const PromptScreen: React.FC = () => {
     }
 
     return (
-        <>
-            <ScrollView contentContainerStyle={styles.container}>
-                <View style={styles.container}>
-                    <View style={styles.imageContainer}>
-                        <Image
-                            source={{ uri: imageUrl }}
-                            style={styles.image}
-                        />
-                    </View>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Введите запрос"
-                        value={prompt}
-                        onChangeText={setPrompt}
+        <ScrollView
+            style={styles.screen}
+            contentContainerStyle={styles.content}
+        >
+            <View>
+                <View style={styles.imageContainer}>
+                    <Image
+                        source={{ uri: imageUrl }}
+                        style={styles.image}
                     />
-                    <Text>Вы ввели: {finalValue}</Text>
-                    <View style={styles.buttonView}>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={
-                                () => {
-                                    sendPrompt(prompt);
-                                    handleSave();
-                                }}
-                            disabled={isLoading || !prompt.trim()}
-                        >
-                            <Text>Отправить запрос</Text>
-                        </TouchableOpacity>
-                        {isLoading && (
-                            <View>
-                                <Text style={styles.textSending}>Отправляем текст...</Text>
-                                <ActivityIndicator  size="large" color="#72b6ff" />
-                            </View>
-                        )}
-                    </View>
-                    <View style={styles.responseView}>
-                        {apiResponse && <Text style={styles.responseText}>Ответ сервера: {apiResponse}
-                        </Text>}
-                    </View>
                 </View>
-            </ScrollView>
-        </>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Введите запрос"
+                    value={prompt}
+                    onChangeText={setPrompt}
+                />
+                <Text>Вы ввели: {finalValue}</Text>
+                <View style={styles.buttonView}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={async () => {
+                            const wasSent = await sendPrompt(prompt);
+
+                            if (wasSent) {
+                                handleSave();
+                            }
+                        }}
+                        disabled={isLoading || !prompt.trim()}
+                    >
+                        <Text>Отправить запрос</Text>
+                    </TouchableOpacity>
+                    {isLoading && (
+                        <View>
+                            <Text style={styles.textSending}>Отправляем текст...</Text>
+                            <ActivityIndicator size="large" color="#72b6ff" />
+                        </View>
+                    )}
+                </View>
+                <View style={styles.responseView}>
+                    {apiResponse && <Text style={styles.responseText}>Ответ сервера: {apiResponse}
+                    </Text>}
+                </View>
+            </View>
+        </ScrollView>
     )
 }
 
 export default PromptScreen;
 
 const styles = StyleSheet.create({
-    container: {
+    screen: {
+        flex: 1,
+        backgroundColor: "transparent",
+    },
+    content: {
+        flexGrow: 1,
         padding: 20,
         paddingBottom: 25,
     },

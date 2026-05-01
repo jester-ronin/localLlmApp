@@ -2,27 +2,34 @@
 import { useState, useEffect } from 'react';
 import { getColors } from 'react-native-image-colors';
 
+const fallbackGradient: [string, string] = ['#4c0812', '#f06a32'];
+
 export function useAutoGradientColor(url: string) {
-    const [gradientColors, setGradientColors] = useState<[string, string, ...string[]]>(['#f3f3f3', '#e2e2e2']);
+    const [gradientColors, setGradientColors] = useState<[string, string, ...string[]]>(fallbackGradient);
 
     useEffect(() => {
         const fetchColors = async () => {
-            const result = await getColors(url, {
-                fallback: '#000000',
-                cache: true,
-            });
+            try {
+                const result = await getColors(url, {
+                    fallback: fallbackGradient[0],
+                    cache: true,
+                });
 
-            if (result.platform === 'android') {
-                setGradientColors([result.dominant || '#ccc', result.vibrant || '#eee']);
-            } else if (result.platform === 'ios') {
-                setGradientColors([result.background || '#ccc', result.primary || '#eee']);
-            } else {
-                setGradientColors([result.vibrant || '#ccc', result.lightVibrant || '#eee']);
+                if (result.platform === 'android') {
+                    setGradientColors([result.dominant || fallbackGradient[0], result.vibrant || fallbackGradient[1]]);
+                } else if (result.platform === 'ios') {
+                    setGradientColors([result.background || fallbackGradient[0], result.primary || fallbackGradient[1]]);
+                } else {
+                    setGradientColors([result.vibrant || fallbackGradient[0], result.lightVibrant || fallbackGradient[1]]);
+                }
+            } catch (error) {
+                console.warn('Could not extract gradient colors from image', error);
+                setGradientColors(fallbackGradient);
             }
         };
 
         fetchColors();
     }, [url]);
 
-    return {gradientColors};
+    return { gradientColors };
 }

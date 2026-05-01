@@ -34,24 +34,25 @@ export const useChatApi = () => {
     const [messages, setMessages] = useState<Message[]>([]);
 
     const sendPrompt = async (prompt: string) => {
-        if (!prompt.trim()) return;
+        if (!prompt.trim() || isLoading) return false;
 
         const newUserMessage: Message = {
             role: "user",
             content: prompt
         };
 
-        const updatedMessages = [...messages, newUserMessage];
-        setMessages(updatedMessages);
+        const requestMessages = [...messages, newUserMessage];
 
         setIsLoading(true);
+        setApiResponse(null);
+
         try {
             const response = await fetch(LLM_CHAT_COMPLETIONS_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     model: LLM_MODEL,
-                    messages: updatedMessages
+                    messages: requestMessages
                 })
             });
 
@@ -68,13 +69,16 @@ export const useChatApi = () => {
 
             setApiResponse(extractAnswer(content));
 
-            setMessages(prev => [
-                ...prev,
+            setMessages([
+                ...requestMessages,
                 { role: "assistant", content }
             ]);
+
+            return true;
         } catch (error) {
             console.error(error);
             setApiResponse(getApiErrorMessage(error));
+            return false;
         } finally {
             setIsLoading(false);
         }
