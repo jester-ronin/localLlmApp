@@ -38,8 +38,7 @@ const PromptScreen: React.FC = () => {
             return;
         }
 
-        const mimeType = asset.mimeType || "image/jpeg";
-        setSelectedImage(`data:${mimeType};base64,${asset.base64}`);
+        setSelectedImage(`data:image/jpeg;base64,${asset.base64.trim()}`);
     }
 
     return (
