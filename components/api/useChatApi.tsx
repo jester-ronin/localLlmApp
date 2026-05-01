@@ -3,6 +3,8 @@ import { useState } from "react";
 import { LLM_CHAT_COMPLETIONS_URL, LLM_MODEL } from "../../utils/apiConfig";
 import extractAnswer from "../../utils/extractAnswer";
 
+const DEFAULT_IMAGE_PROMPT = "Опиши изображение.";
+
 type TextContent = {
     type: "text";
     text: string;
@@ -58,12 +60,13 @@ export const useChatApi = () => {
                 }
             }
             : null;
+        const messageText = promptText || DEFAULT_IMAGE_PROMPT;
 
         const newUserMessage: Message = {
             role: "user",
             content: imageContent
                 ? [
-                    ...(promptText ? [{ type: "text", text: promptText } as TextContent] : []),
+                    { type: "text", text: messageText },
                     imageContent
                 ]
                 : promptText
@@ -72,7 +75,7 @@ export const useChatApi = () => {
         const requestMessages = [...messages, newUserMessage];
         const savedUserMessage: Message = {
             role: "user",
-            content: promptText || "Изображение"
+            content: promptText || DEFAULT_IMAGE_PROMPT
         };
 
         setIsLoading(true);

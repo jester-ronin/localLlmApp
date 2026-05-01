@@ -11,8 +11,8 @@ const PromptScreen: React.FC = () => {
     const { apiResponse, isLoading, sendPrompt } = useChatApi();
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-    function handleSave() {
-        setFinalValue(prompt)
+    function handleSave(value: string) {
+        setFinalValue(value)
     }
 
     async function handlePickImage() {
@@ -74,10 +74,14 @@ const PromptScreen: React.FC = () => {
                     <TouchableOpacity
                         style={styles.button}
                         onPress={async () => {
-                            const wasSent = await sendPrompt(prompt, selectedImage);
+                            const imageToSend = selectedImage;
+                            const wasSent = await sendPrompt(prompt, imageToSend);
 
                             if (wasSent) {
-                                handleSave();
+                                handleSave(prompt.trim() || "Изображение");
+                            }
+
+                            if (imageToSend) {
                                 setSelectedImage(null);
                             }
                         }}
