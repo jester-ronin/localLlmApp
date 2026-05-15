@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TextInput, View, Text, StyleSheet, ActivityIndicator, Image, TouchableOpacity, ScrollView } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useChatApi } from "../api/useChatApi";
-import { imageUrl } from "../../utils/imageURL";
+import { imageSource } from "../../utils/imageURL";
 import { compressImageToBase64 } from "../../utils/compressImage";
 
 
@@ -14,6 +14,10 @@ const PromptScreen: React.FC = () => {
 
     function handleSave(value: string) {
         setFinalValue(value)
+    }
+
+    function handleRemoveImage() {
+        setSelectedImage(null);
     }
 
     async function handlePickImage() {
@@ -50,7 +54,7 @@ const PromptScreen: React.FC = () => {
             <View>
                 <View style={styles.imageContainer}>
                     <Image
-                        source={{ uri: imageUrl }}
+                        source={imageSource}
                         style={styles.image}
                     />
                 </View>
@@ -75,6 +79,13 @@ const PromptScreen: React.FC = () => {
                             source={{ uri: selectedImage }}
                             style={styles.selectedImagePreview}
                         />
+                        <TouchableOpacity
+                            style={styles.removeImageButton}
+                            onPress={handleRemoveImage}
+                            disabled={isLoading}
+                        >
+                            <Text style={styles.removeImageButtonText}>×</Text>
+                        </TouchableOpacity>
                     </View>
                 )}
                 <Text>{"\u0412\u044b \u0432\u0432\u0435\u043b\u0438"}: {finalValue}</Text>
@@ -157,6 +168,7 @@ const styles = StyleSheet.create({
         lineHeight: 24,
     },
     selectedImagePreviewContainer: {
+        alignSelf: "flex-start",
         marginBottom: 10,
     },
     selectedImagePreview: {
@@ -165,6 +177,22 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         borderColor: "rgba(0, 0, 0, 0.2)",
+    },
+    removeImageButton: {
+        position: "absolute",
+        top: -8,
+        right: -8,
+        width: 22,
+        height: 22,
+        borderRadius: 11,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#1f1f1f",
+    },
+    removeImageButtonText: {
+        color: "#fff",
+        fontSize: 16,
+        lineHeight: 18,
     },
     buttonView: {
         marginTop: 10,
