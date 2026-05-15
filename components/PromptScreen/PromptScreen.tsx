@@ -69,7 +69,15 @@ const PromptScreen: React.FC = () => {
                         <Text style={styles.imageButtonText}>{selectedImage ? "✓" : "+"}</Text>
                     </TouchableOpacity>
                 </View>
-                <Text>Вы ввели: {finalValue}</Text>
+                {selectedImage && (
+                    <View style={styles.selectedImagePreviewContainer}>
+                        <Image
+                            source={{ uri: selectedImage }}
+                            style={styles.selectedImagePreview}
+                        />
+                    </View>
+                )}
+                <Text>{"\u0412\u044b \u0432\u0432\u0435\u043b\u0438"}: {finalValue}</Text>
                 <View style={styles.buttonView}>
                     <TouchableOpacity
                         style={styles.button}
@@ -91,7 +99,7 @@ const PromptScreen: React.FC = () => {
                     </TouchableOpacity>
                     {isLoading && (
                         <View>
-                            <Text style={styles.textSending}>Отправляем текст...</Text>
+                            <Text style={styles.textSending}>Отправляем...</Text>
                             <ActivityIndicator size="large" color="#72b6ff" />
                         </View>
                     )}
@@ -130,7 +138,8 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
         paddingHorizontal: 10,
         backgroundColor: "#EDE8D0",
-        borderRadius: 10
+        borderRadius: 10,
+        color: "black"
     },
     imageButton: {
         width: 40,
@@ -146,6 +155,16 @@ const styles = StyleSheet.create({
     imageButtonText: {
         fontSize: 22,
         lineHeight: 24,
+    },
+    selectedImagePreviewContainer: {
+        marginBottom: 10,
+    },
+    selectedImagePreview: {
+        width: 64,
+        height: 64,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: "rgba(0, 0, 0, 0.2)",
     },
     buttonView: {
         marginTop: 10,

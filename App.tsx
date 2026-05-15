@@ -1,4 +1,4 @@
-import { TextInput, View, Text, StyleSheet, Button, Image } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 import PromptScreen from "./components/PromptScreen/PromptScreen";
 import { useAutoGradientColor } from "./components/GetGradientColor/useAutoGradientColor";
 import { imageUrl } from "./utils/imageURL";
@@ -32,5 +32,6 @@ const styles = StyleSheet.create({
   },
   gradient: {
     flex: 1,
+    paddingTop: StatusBar.currentHeight ?? 0,
   }
 });

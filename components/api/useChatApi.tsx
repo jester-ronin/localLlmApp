@@ -30,6 +30,17 @@ type ChatCompletionResponse = {
     }[];
 };
 
+function getAssistantContent(data: ChatCompletionResponse) {
+    const message = data.choices?.[0]?.message;
+    const content = message?.content?.trim();
+
+    if (content) {
+        return content;
+    }
+
+    return null;
+}
+
 function getApiErrorMessage(error: unknown) {
     if (error instanceof Error) {
         if (error.message === "Network request failed") {
@@ -96,10 +107,10 @@ export const useChatApi = () => {
             }
 
             const data: ChatCompletionResponse = await response.json();
-            const content = data.choices?.[0]?.message?.content;
+            const content = getAssistantContent(data);
 
             if (!content) {
-                throw new Error("Сервер ответил, но в ответе нет текста от модели");
+                throw new Error("\u0421\u0435\u0440\u0432\u0435\u0440 \u043e\u0442\u0432\u0435\u0442\u0438\u043b, \u043d\u043e \u043c\u043e\u0434\u0435\u043b\u044c \u043d\u0435 \u0432\u0435\u0440\u043d\u0443\u043b\u0430 \u0442\u0435\u043a\u0441\u0442. \u041f\u043e\u043f\u0440\u043e\u0431\u0443\u0439 \u0434\u0440\u0443\u0433\u043e\u0435 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435 \u0438\u043b\u0438 \u0443\u0431\u0435\u0434\u0438\u0441\u044c, \u0447\u0442\u043e \u0432 LM Studio \u0432\u044b\u0431\u0440\u0430\u043d\u0430 vision-\u043c\u043e\u0434\u0435\u043b\u044c.");
             }
 
             setApiResponse(extractAnswer(content));
